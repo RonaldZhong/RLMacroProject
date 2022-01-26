@@ -1,0 +1,2 @@
+class BB:
+    pass

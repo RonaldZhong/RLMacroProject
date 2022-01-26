@@ -1,0 +1,45 @@
+# model parameters
+CRITIC_HIDDEN_DIM: 16
+CRITIC_NUM_HIDDEN_LAYER: 3
+CRITIC_ACTIVATE: 'tanh'
+CRITIC_BATCH_NORM: True
+CRITIC_WEIGHT_INIT: True
+
+ACTOR_HIDDEN_DIM: 4
+ACTOR_NUM_HIDDEN_LAYER: 2
+ACTOR_ACTIVATE: 'relu'
+ACTOR_BATCH_NORM: True
+ACTOR_WEIGHT_INIT: True
+
+MAX_CRITIC_LR: 0.01
+MIN_CRITIC_LR: 0.001
+CRITIC_LR_DECAY: 0.001
+
+MAX_ACTOR_LR: 0.01
+MIN_ACTOR_LR: 0.001
+ACTOR_LR_DECAY: 0.001
+
+# Env parameters
+RHO: 0.1               # AR(1) correlation
+SIGMA: 0.1             # AR(1) variant
+DELTA: 0.05            # capital depreciation rate
+ALPHA: 0.3             # Cobb-Douglas parameter
+BETA: 0.96             # discount factor
+WAGE: 5                # wage rate if fixed. would be modified later     
+K_INIT: 5              # initial capital if transform from worker to entrepreneur
+z0: 0                  # time 0 productivity shock
+KMIN: 0                # capital lower bound
+KMAX: 40               # capital upper bound
+ZMIN: -0.4             # shock lower bound, see experiment below
+ZMAX: 0.4              # shock upper bound, see experiment below
+GRID_SIZE: 100         # grid point size
+# seed
+seed: 20
+
+# Training parameters
+MAX_ITERATION: 10000
+REPORT_PER_ITERATION: 1000
+ENV_GEN_STATE_SAMPLING: False
+BATCH_SIZE: 32
+ENV_TRANSITION_NUM_STEPS: 1
+
