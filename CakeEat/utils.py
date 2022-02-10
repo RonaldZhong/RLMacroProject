@@ -39,3 +39,12 @@ class LR_SCHEME:
         act_lr = self.min_act_lr + (self.max_act_lr - self.min_act_lr) * np.exp(-self.act_decay*i)
         return crt_lr, act_lr
 
+
+def soft_update(target, source, tau):
+    for target_param, param in zip(target.parameters(), source.parameters()):
+        target_param.data.copy_(target_param.data * (1.0 - tau) + param.data * tau)
+
+
+def hard_update(target, source):
+    for target_param, param in zip(target.parameters(), source.parameters()):
+        target_param.data.copy_(param.data)

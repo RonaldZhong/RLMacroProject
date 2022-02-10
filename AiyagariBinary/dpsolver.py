@@ -14,4 +14,3 @@ class DPSolver:
         ddp = DiscreteDP(self.env.R, self.env.Q, self.env.BETA)
         result = ddp.solve(method='policy_iteration')
         return result
-

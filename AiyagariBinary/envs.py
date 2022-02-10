@@ -63,6 +63,7 @@ def populate_R(R, a_size, z_size, a_vals, z_vals, r, w):
             if c > 0:
                 R[s_i, new_a_i] = np.log(c)  # Utility
 
+
 @jit(nopython=True)
 def populate_Q(Q, a_size, z_size, Π):
     n = a_size * z_size
@@ -121,6 +122,14 @@ class AiyagariEnv(EconModel):
 
         return self.state_sampling(B) if sampling == True else self.state_linspace(B)
 
+    def shock_transition(self, z_idx):
+        # input current shock batch z_idx
+        # return simulated next shock according to the shock transition matrix
+        z_idx = z_idx.long().squeeze(-1)
+        p = torch.tensor(self.PI)[z_idx]  # condition probability
+        next_z_idx = torch.multinomial(p, num_samples=1, replacement=True)
+        return next_z_idx.float()
+
     def transit(self, state, action, num_steps=None):
 
         if num_steps is None:
@@ -128,14 +137,14 @@ class AiyagariEnv(EconModel):
         R = 0
         beta = self.cfg.BETA
         for i in range(num_steps): 
-            a, z = state[:, 0], state[:, 1] * 0.9 + 0.1
+            a, z = state[:, 0:1].clone(), state[:, 1:2].clone() * 0.9 + 0.1
             a_new = action
             w = self.cfg.w
             r = self.cfg.r
             c = w * z + (1 + r) * a - a_new
             r = torch.log(c)
-            state[:, 0] = a_new
-            state[:, 1] = 1
+            state[:, 0:1] = a_new.clone()
+            state[:, 1:2] = self.shock_transition(state[:, 1:2].clone())
             R += r*beta**i
 
-        return R, s
+        return R, state
